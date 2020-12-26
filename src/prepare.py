@@ -21,12 +21,12 @@ parser.add_argument('--configprc-dir', default='../dependencies/config',
 parser.add_argument('--dclass-dir', default='../dependencies/astron/dclass',
                     help='The directory of the Astron dclass.')
 parser.add_argument('--src-dir', default='..',
-                    help='The directory of the Toontown source code.')
+                    help='The directory of the source code.')
 parser.add_argument('--server-ver', default='tt-REVISION',
                     help='The server version of this build.\n'
                     'REVISION tokens will be replaced with the current Git revision string.')
 parser.add_argument('modules', nargs='*', default=['otp', 'toontown'],
-                    help='The Toontown modules to be included in the build.')
+                    help='The modules to be included in the build.')
 args = parser.parse_args()
 
 print ('Preparing to build the Cient... Please wait')
