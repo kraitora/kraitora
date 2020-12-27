@@ -7,26 +7,37 @@ import subprocess
 
 from pandac.PandaModules import *
 
-"""
-Reads codebase and strips out non-essential files, like server sided code, removes PYC files and clears out debugging tools
-"""
-
-
-# These are arguments that *can* be parsed by running python prepare_client.py -- (args)
 parser = argparse.ArgumentParser()
-parser.add_argument('--build-dir', default='build',
-                    help='The directory in which to store the build files.')
-parser.add_argument('--configprc-dir', default='../dependencies/config',
-                    help='The directory of the Panda3D Config.prc.')
-parser.add_argument('--dclass-dir', default='../dependencies/astron/dclass',
-                    help='The directory of the Astron dclass.')
+
+#Argument for the location of the source code.              
 parser.add_argument('--src-dir', default='..',
                     help='The directory of the source code.')
+
+#Argument for Python Modules to be Included
+parser.add_argument('modules', nargs='*', default=['otp', 'toontown'],
+                    help='The modules to be included in the build.')
+
+#Argument for the build directory. This is not the final directory this is where the code is temporarely stored.
+parser.add_argument('--build-dir', default='build',
+                    help='The directory in which to store the build files.')
+
+#Argument for the version number of the game. REVISION is replaced with the git hash
 parser.add_argument('--server-ver', default='tt-REVISION',
                     help='The server version of this build.\n'
                     'REVISION tokens will be replaced with the current Git revision string.')
-parser.add_argument('modules', nargs='*', default=['otp', 'toontown'],
-                    help='The modules to be included in the build.')
+
+#Argument for the location of the Panda3D prc's.
+parser.add_argument('--configprc-dir', default='dependencies/config',
+                    help='The directory of the Panda3D Config.prc.')
+parser.add_argument('--general-prc', default='general.prc',
+                    help='The directory of the Panda3D Config.prc.')
+parser.add_argument('--qa-prc', default='qa.prc',
+                    help='The directory of the Panda3D Config.prc.')
+
+#Argument for the location of the Astron dclass.
+parser.add_argument('--dclass-dir', default='../dependencies/astron/dclass',
+                    help='The directory of the Astron dclass.')
+
 args = parser.parse_args()
 
 print ('Preparing to build the Cient... Please wait')
@@ -131,16 +142,14 @@ for module in args.modules:
 
 # First, we need the PRC file data:
 print ('Writing public_client.prc into gamedata')
-generalConfigFileName = 'general.prc'
-qaConfigFileName = 'qa.prc'
 configData = []
-with open(os.path.join(args.src_dir, 'dependencies', 'config', generalConfigFileName)) as f:
+with open(os.path.join(args.src_dir, args.configprc_dir, args.general_prc)) as f:
     data = f.read()
     configData.append(data)
-with open(os.path.join(args.src_dir, 'dependencies', 'config', 'release', qaConfigFileName)) as f:
+with open(os.path.join(args.src_dir, args.configprc_dir, 'release', args.qa_prc)) as f:
     data = f.read()
     configData.append(data.replace('SERVER_VERSION', serverVersion))
-print ('Using config files: {0}, {1}'.format(generalConfigFileName, qaConfigFileName))
+print ('Using config files: {0}, {1}'.format(args.general_prc, args.qa_prc))
 
 # Next, we need the (stripped) DC file:
 dcFile = DCFile()
