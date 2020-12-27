@@ -1,5 +1,6 @@
 import argparse
 import os
+import sys
 parser = argparse.ArgumentParser()
 parser.add_argument('--build-dir', default='build',
                     help='The directory of which the build was prepared.')
@@ -14,9 +15,15 @@ parser.add_argument('modules', nargs='*', default=['otp', 'toontown'],
 args = parser.parse_args()
 
 print ('Building the client...')
+if not os.path.isdir('bin'):
+    os.mkdir('bin')
 os.chdir(args.build_dir)
-cmd = os.path.join(args.panda3d_dir, 'python/python.exe')
+if sys.platform == "win32":
+    cmd = os.path.join(args.panda3d_dir, 'python/python.exe')
+else:
+    cmd = 'python3'
 cmd += ' -m direct.dist.pfreeze'
+cmd += ' -x panda3d'
 args.modules.extend(['pandac', 'direct'])
 for module in args.modules:
     cmd += ' -i {0}.*.*'.format(module)

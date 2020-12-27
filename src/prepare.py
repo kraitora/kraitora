@@ -131,12 +131,16 @@ for module in args.modules:
 
 # First, we need the PRC file data:
 print ('Writing public_client.prc into gamedata')
-configFileName = 'general.prc'
+generalConfigFileName = 'general.prc'
+qaConfigFileName = 'qa.prc'
 configData = []
-with open(os.path.join(args.src_dir, 'dependencies', 'config', configFileName)) as f:
+with open(os.path.join(args.src_dir, 'dependencies', 'config', generalConfigFileName)) as f:
+    data = f.read()
+    configData.append(data)
+with open(os.path.join(args.src_dir, 'dependencies', 'config', 'release', qaConfigFileName)) as f:
     data = f.read()
     configData.append(data.replace('SERVER_VERSION', serverVersion))
-print ('Using config file: {0}'.format(configFileName))
+print ('Using config files: {0}, {1}'.format(generalConfigFileName, qaConfigFileName))
 
 # Next, we need the (stripped) DC file:
 dcFile = DCFile()
