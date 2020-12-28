@@ -52,6 +52,10 @@ if platform.system() == 'Linux':
     parser.add_argument('--python-binary', default='python',                     
         help='The path to the Python Executable.')
 
+# If user is on macOS, this is a path for the Python framework.
+if platform.system() == 'Darwin':
+    parser.add_argument('--python-framework-dir', help='The path to the Python framework.')
+
 #Lets Parse all the Arguments
 args = parser.parse_args()
 
@@ -83,6 +87,8 @@ cmd += ' -i {0}'.format('site')
 cmd += ' -i {0}'.format('_strptime')
 if platform.system() == 'Windows':
     cmd += ' -l'
+if platform.system() == 'Darwin' and args.python_framework_dir:
+    cmd += ' -L {0}'.format(args.python_framework_dir)
 cmd += ' -o {0}'.format(outputFile)
 cmd += ' {0}'.format(args.main_module)
 os.system(cmd)
