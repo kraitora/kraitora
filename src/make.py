@@ -31,7 +31,7 @@ if platform.system() == 'Windows':
                         help='The path to the Panda3D build to use for this distribution.')
 #If user is on macOS this is the default directory                        
 if platform.system() == 'Darwin':
-    parser.add_argument('--panda3d-dir', default='/Developer/Panda3D',
+    parser.add_argument('--panda3d-dir', default='/Library/Developer/Panda3D',
                         help='The path to the Panda3D build to use for this distribution.')
 #If user is on Linux this is the default directory                        
 if platform.system() == 'Linux':
@@ -71,7 +71,7 @@ os.chdir(args.build_dir)
 if platform.system() == 'Windows':
     cmd = os.path.join(args.panda3d_dir, args.python_binary)
 if platform.system() == 'Linux' or platform.system() == 'Darwin':
-    cmd = (args.python_binary)
+    cmd = args.python_binary
 cmd += ' -m direct.dist.pfreeze'
 cmd += ' -x panda3d'
 args.modules.extend(['pandac', 'direct'])
@@ -81,7 +81,8 @@ cmd += ' -i {0}.*'.format('encodings')
 cmd += ' -i {0}'.format('base64')
 cmd += ' -i {0}'.format('site')
 cmd += ' -i {0}'.format('_strptime')
-cmd += ' -l'
+if platform.system() == 'Windows':
+    cmd += ' -l'
 cmd += ' -o {0}'.format(outputFile)
 cmd += ' {0}'.format(args.main_module)
 os.system(cmd)
