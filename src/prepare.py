@@ -31,11 +31,11 @@ parser.add_argument('--configprc-dir', default='dependencies/config',
                     help='The directory of the Panda3D Config.prc.')
 parser.add_argument('--general-prc', default='general.prc',
                     help='The directory of the Panda3D Config.prc.')
-parser.add_argument('--qa-prc', default='qa.prc',
+parser.add_argument('--qa-prc', default='release/qa.prc',
                     help='The directory of the Panda3D Config.prc.')
 
 #Argument for the location of the Astron dclass.
-parser.add_argument('--dclass-dir', default='../dependencies/astron/dclass',
+parser.add_argument('--dclass-dir', default='dependencies/astron/dclass',
                     help='The directory of the Astron dclass.')
 
 args = parser.parse_args()
@@ -146,14 +146,14 @@ configData = []
 with open(os.path.join(args.src_dir, args.configprc_dir, args.general_prc)) as f:
     data = f.read()
     configData.append(data)
-with open(os.path.join(args.src_dir, args.configprc_dir, 'release', args.qa_prc)) as f:
+with open(os.path.join(args.src_dir, args.configprc_dir, args.qa_prc)) as f:
     data = f.read()
     configData.append(data.replace('SERVER_VERSION', serverVersion))
 print ('Using config files: {0}, {1}'.format(args.general_prc, args.qa_prc))
 
 # Next, we need the (stripped) DC file:
 dcFile = DCFile()
-filepath = os.path.join(args.dclass_dir)
+filepath = os.path.join(args.src_dir, args.dclass_dir)
 for filename in os.listdir(filepath):
     if filename.endswith('.dc'):
         dcFile.read(Filename.fromOsSpecific(os.path.join(filepath, filename)))
