@@ -13,7 +13,7 @@ parser.add_argument('--output-dir', default='bin',
                     help='The directory of which the build was prepared.')
 
 #Argument for the Executable of the compiled code
-parser.add_argument('--output', default='TIAEngine',
+parser.add_argument('--output', default='TTEngine',
                     help='The name of the built file.')
 
 #Argument for the Main Python Module
